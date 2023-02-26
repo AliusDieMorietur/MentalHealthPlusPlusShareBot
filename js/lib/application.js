@@ -1,6 +1,8 @@
 const ngrok = require("ngrok");
-const ChannelManager = require("../lib/channelManager");
-const Server = require("../lib/server");
+const ChannelManager = require("./channelManager");
+const Database = require("./database");
+const Server = require("./server");
+const Domain = require("./domain");
 
 class Application {
   constructor(config = {}) {
@@ -8,9 +10,11 @@ class Application {
   }
 
   async start() {
-    const { channel, channels, server } = this.config;
+    console.log("domain", domain);
+    const { channel, channels, server, database } = this.config;
     this.channelManager = new ChannelManager(channels, channel);
     this.server = new Server(server, this.channelManager);
+    this.database = new Database(database);
     if (!this.config.channel.serverUrl) {
       console.log("Starting ngrok");
       const options = {
@@ -21,7 +25,7 @@ class Application {
         console.error({ err }, "Cannot connect ngrok");
         throw err;
       });
-      console.log({ url }, "ngrok tunnel started");
+      console.log("ngrok tunnel started at", { url });
       this.config.channel.serverUrl = url;
       this.channelManager.updateServerUrl(url);
       this.config.channel.serverUrlIsGenerated = true;

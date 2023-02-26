@@ -29,7 +29,6 @@ class ChannelManager {
   }
 
   handle(method, data) {
-    console.log("data", data);
     const channels = Object.values(this.channels);
     for (const channel of channels) {
       if (channel.canHandle(method)) {

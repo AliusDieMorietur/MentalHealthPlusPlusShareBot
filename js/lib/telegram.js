@@ -63,7 +63,7 @@ class TelegramChannel extends Channel {
     const method = "POST";
     const url = `${apiUrl}${token}/setWebhook?url=${serverUrl}/api/hook/${token}`;
 
-    console.log({ url }, "Setting telegram hook");
+    console.log("Setting telegram hook", { url });
     const { data, statusCode } = await fetch(url, { headers, method });
     console.log({ statusCode, data }, `Telegram  hook set`);
   }
