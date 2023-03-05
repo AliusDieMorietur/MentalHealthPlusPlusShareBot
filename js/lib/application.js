@@ -1,20 +1,21 @@
-const ngrok = require("ngrok");
-const ChannelManager = require("./channelManager");
-const Database = require("./database");
-const Server = require("./server");
-const Domain = require("./domain");
+import ngrok from "ngrok";
+import { ChannelManager } from "./channelManager.js";
+import { Database } from "./database.js";
+import { Server } from "./server.js";
+import { initDomain } from "../domain/index.js";
+import { migrateUp } from "./migration.js";
 
-class Application {
+export class Application {
   constructor(config = {}) {
     this.config = config;
   }
 
   async start() {
-    console.log("domain", domain);
     const { channel, channels, server, database } = this.config;
+    this.database = new Database(database);
+    this.domain = initDomain(database);
     this.channelManager = new ChannelManager(channels, channel);
     this.server = new Server(server, this.channelManager);
-    this.database = new Database(database);
     if (!this.config.channel.serverUrl) {
       console.log("Starting ngrok");
       const options = {
@@ -32,7 +33,10 @@ class Application {
     }
     this.server.start();
     this.channelManager.start();
+    const {
+      rows: [{ now }],
+    } = await this.database.start();
+    console.log(`Database connected: ${now}`);
+    migrateUp(database);
   }
 }
-
-module.exports = Application;

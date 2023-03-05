@@ -1,21 +1,23 @@
-const { Pool } = require("pg");
+import pg from "pg";
+const { Pool } = pg;
 
-class Database {
+export class Database {
   static instance = null;
 
   constructor(config) {
     this.config = config;
   }
 
-  start() {
-    this.pool = new Pool(config);
-    this.query("SELECT NOW()");
+  async start() {
+    this.pool = new Pool(this.config);
+    return this.query("SELECT NOW()");
   }
 
   async query(query, args) {
     const client = await this.pool.connect();
-    await client.query(query, args);
+    const data = await client.query(query, args);
     client.release();
+    return data;
   }
 
   getInstance() {
@@ -23,5 +25,3 @@ class Database {
     return this.instance || (instance = createInstance());
   }
 }
-
-module.exports = Database;

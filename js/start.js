@@ -1,6 +1,7 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const Application = require("./lib/application");
+import { Application } from "./lib/application.js";
 
 const {
   TELEGRAM_BOT_TOKEN,
@@ -16,7 +17,7 @@ const {
 const app = new Application({
   server: {
     protocol: "http",
-    port: 3000,
+    port: 8000,
     hostname: "127.0.0.1",
   },
   database: {

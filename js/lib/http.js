@@ -1,11 +1,11 @@
-const { safeParseJSON } = require("../utils/safeParseJSON");
+import { safeParseJSON } from "../utils/safeParseJSON.js";
 
-const http = require("http");
-const https = require("https");
+import http from "http";
+import https from "https";
 
 const ALLOWED_PROTOCOLS = { http, https };
 
-const fetch = (url, { timeout, ...options }) => {
+export const fetch = (url, { timeout, ...options }) => {
   const dest = new URL(url);
   const protocol = ALLOWED_PROTOCOLS[dest.protocol.slice(0, -1)];
   return new Promise((resolve, reject) => {
@@ -55,7 +55,7 @@ const fetch = (url, { timeout, ...options }) => {
   });
 };
 
-const fetchJSON = async (url, options) => {
+export const fetchJSON = async (url, options) => {
   const reqOptions = { ...options, headers: { ...options.headers } };
   if (reqOptions.body) {
     reqOptions.body =
@@ -76,9 +76,4 @@ const fetchJSON = async (url, options) => {
     throw res;
   }
   return res;
-};
-
-module.exports = {
-  fetch,
-  fetchJSON,
 };

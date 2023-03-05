@@ -1,9 +1,10 @@
-const TelegramChannel = require("./telegram");
+import { TelegramChannel } from "./telegram/channel.js";
 
-class ChannelManager {
-  constructor(channels, channelConfig) {
+export class ChannelManager {
+  constructor(channels, channelConfig, channelStateDomain) {
     this.channels = {};
     this.channelConfig = channelConfig;
+    this.channelStateDomain = channelStateDomain;
     this.load(channels);
   }
 
@@ -40,12 +41,13 @@ class ChannelManager {
 
   add({ name, config }) {
     if (name === "telegram" && config.token) {
-      this.channels[name] = new TelegramChannel({
-        ...this.channelConfig,
-        ...config,
-      });
+      this.channels[name] = new TelegramChannel(
+        {
+          ...this.channelConfig,
+          ...config,
+        },
+        this.channelStateDomain
+      );
     }
   }
 }
-
-module.exports = ChannelManager;

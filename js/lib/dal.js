@@ -1,5 +1,8 @@
-class DAL {
-  constructor() {}
-}
+import { CRUD } from "./crud.js";
 
-module.exports = DAL;
+export class DAL {
+  constructor(table, database) {
+    this.database = database;
+    this.crud = new CRUD(table, database);
+  }
+}

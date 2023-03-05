@@ -1,6 +1,7 @@
-class Receiver {
-  constructor(config) {
+export class Receiver {
+  constructor(config, channelStateDomain) {
     this.config = config;
+    this.channelStateDomain = channelStateDomain;
   }
 
   canHandle() {
@@ -11,5 +12,3 @@ class Receiver {
     throw new Error("parseMessage is not implemented");
   }
 }
-
-module.exports = Receiver;

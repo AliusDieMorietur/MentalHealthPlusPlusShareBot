@@ -1,6 +1,7 @@
-class Sender {
-  constructor(config) {
+export class Sender {
+  constructor(config, channelStateDomain) {
     this.config = config;
+    this.channelStateDomain = channelStateDomain;
   }
 
   prepareMessage() {
@@ -11,5 +12,3 @@ class Sender {
     throw new Error("send is not implemented");
   }
 }
-
-module.exports = Sender;

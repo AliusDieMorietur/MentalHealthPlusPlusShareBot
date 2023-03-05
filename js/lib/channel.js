@@ -1,11 +1,12 @@
-const Receiver = require("./receiver");
-const Sender = require("./sender");
+import { Receiver } from "./receiver.js";
+import { Sender } from "./sender.js";
 
-class Channel {
-  constructor(config) {
+export class Channel {
+  constructor(config, channelStateDomain) {
     this.config = config;
-    this.receiver = new Receiver(config);
-    this.sender = new Sender(config);
+    this.channelStateDomain = channelStateDomain;
+    this.receiver = new Receiver(config, channelStateDomain);
+    this.sender = new Sender(config, channelStateDomain);
   }
 
   async start() {
@@ -24,8 +25,8 @@ class Channel {
     return this.receiver.canHandle(method, this.config.token);
   }
 
-  parseMessage(...args) {
-    return this.receiver.parseMessage(...args);
+  handleMessage(...args) {
+    return this.receiver.handleMessage(...args);
   }
 
   prepareMessage(...args) {
@@ -36,5 +37,3 @@ class Channel {
     return this.sender.prepareMessage(...args);
   }
 }
-
-module.exports = Channel;
