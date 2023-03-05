@@ -2,7 +2,7 @@ import ngrok from "ngrok";
 import { ChannelManager } from "./channelManager.js";
 import { Database } from "./database.js";
 import { Server } from "./server.js";
-import { initDomain } from "../domain/index.js";
+import { initDomain } from "../domain/ChannelState.js";
 import { migrateUp } from "./migration.js";
 
 export class Application {
